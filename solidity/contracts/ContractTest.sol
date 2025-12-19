@@ -149,6 +149,15 @@ contract ContractTest is IContractTest {
     _string = 'test';
   }
 
+  function internalPureVirtualFunctionWithStruct(MyStruct memory _myStruct)
+    internal
+    pure
+    virtual
+    returns (MyStruct memory)
+  {
+    return _myStruct;
+  }
+
   function testFunc(uint256) public pure returns (bool) {
     return true;
   }

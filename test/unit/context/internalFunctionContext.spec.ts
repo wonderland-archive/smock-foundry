@@ -1,6 +1,12 @@
 import { expect } from 'chai';
 import { DataLocation, FunctionStateMutability, FunctionVisibility, UserDefinedTypeName, UserDefinedValueTypeDefinition } from 'solc-typed-ast';
-import { mockElementaryTypeName, mockFunctionDefinition, mockParameterList, mockVariableDeclaration } from '../../mocks';
+import {
+  mockElementaryTypeName,
+  mockFunctionDefinition,
+  mockParameterList,
+  mockUserDefinedTypeName,
+  mockVariableDeclaration,
+} from '../../mocks';
 import { internalFunctionContext } from '../../../src/context';
 
 describe('internalFunctionContext', () => {
@@ -257,6 +263,38 @@ describe('internalFunctionContext', () => {
       implemented: true,
       isView: false,
       explicitOutputTypes: [],
+      isPure: false,
+    });
+  });
+
+  it('process structs return parameters', () => {
+    const parameters = [
+      mockVariableDeclaration({
+        typeString: 'struct MyStruct',
+        vType: mockUserDefinedTypeName({
+          typeString: 'struct MyStruct',
+          vReferencedDeclaration: mockUserDefinedTypeName({
+            children: [mockVariableDeclaration({ name: 'field1', typeString: 'uint256' })],
+          }),
+        }),
+      }),
+    ];
+    const node = mockFunctionDefinition({ ...defaultAttributes, vReturnParameters: mockParameterList({ vParameters: parameters }) });
+    const context = internalFunctionContext(node);
+
+    expect(context).to.eql({
+      functionName: 'testInternalFunction',
+      signature: 'testInternalFunction()',
+      parameters: 'MyStruct _returnParam0',
+      inputs: '',
+      outputs: 'MyStruct _returnParam0',
+      inputNames: [],
+      outputNames: ['_returnParam0'],
+      inputTypes: [],
+      outputTypes: ['MyStruct'],
+      implemented: true,
+      isView: false,
+      explicitOutputTypes: ['MyStruct memory'],
       isPure: false,
     });
   });

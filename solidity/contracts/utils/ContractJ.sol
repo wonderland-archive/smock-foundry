@@ -28,4 +28,8 @@ contract ContractJ {
     myUserTypeVariable = add(a, b);
     return myUserTypeVariable;
   }
+
+  function internalPureAdd(MyUserType a, MyUserType b) internal pure virtual returns (MyUserType) {
+    return MyUserType.wrap(MyUserType.unwrap(a) + MyUserType.unwrap(b));
+  }
 }

@@ -138,6 +138,7 @@ export function extractParameters(parameters: VariableDeclaration[]): {
   const parameterNames = parameters.map((parameter, index) => parameter.name || `_param${index}`);
 
   const parameterTypes = parameters.map((parameter) => {
+    // If the parameter is a user-defined value type, we need to get the underlying type
     if (parameter.vType instanceof UserDefinedTypeName) {
       if (parameter.vType.vReferencedDeclaration instanceof UserDefinedValueTypeDefinition) {
         return sanitizeParameterType(parameter.vType.vReferencedDeclaration.underlyingType.typeString);
@@ -170,7 +171,7 @@ export function extractReturnParameters(returnParameters: VariableDeclaration[])
   const returnParameterTypes = returnParameters.map((parameter) => sanitizeParameterType(parameter.typeString));
   const returnParameterNames = returnParameters.map((parameter, index) => parameter.name || `_returnParam${index}`);
   const returnExplicitParameterTypes = returnParameters.map((parameter) =>
-    explicitTypeStorageLocation(sanitizeParameterType(parameter.typeString)),
+    sanitizeParameterType(explicitTypeStorageLocation(parameter.typeString)),
   );
 
   return {

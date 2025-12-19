@@ -26,10 +26,10 @@ function expectCall_{{functionName}}({{#if inputs}}{{inputs}}{{/if}}) public {
 
 {{#if isPure}}
 
-  function _{{functionName}}CastToPure(function({{#each inputTypes}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}) internal view {{#if outputs}}returns ({{explicitOutputTypes}}){{/if}} fnIn) 
+  function _{{functionName}}CastToPure(function({{inputs}}) internal view {{#if outputs}}returns ({{explicitOutputTypes}}){{/if}} fnIn) 
     internal 
     pure 
-    returns (function({{#each inputTypes}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}) internal pure {{#if outputs}}returns ({{explicitOutputTypes}}){{/if}} fnOut)
+    returns (function({{inputs}}) internal pure {{#if outputs}}returns ({{explicitOutputTypes}}){{/if}} fnOut)
   {
     assembly {
       fnOut := fnIn

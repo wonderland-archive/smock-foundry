@@ -95,4 +95,9 @@ contract UnitMockContractJ is Test, SmockHelper {
     _contractTest.mock_call_externalAdd(_myUserTypeA, _myUserTypeB, _myUserTypeResult);
     assertEq(ContractJ.MyUserType.unwrap(_contractTest.externalAdd(_myUserTypeA, _myUserTypeB)), _result);
   }
+
+  function test_InternalPureAdd() public {
+    _contractTest.mock_call_internalPureAdd(_myUserTypeA, _myUserTypeB, _myUserTypeResult);
+    assertEq(ContractJ.MyUserType.unwrap(_contractTest.call_internalPureAdd(_myUserTypeA, _myUserTypeB)), _result);
+  }
 }
